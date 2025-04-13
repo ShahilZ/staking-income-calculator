@@ -2,10 +2,6 @@ from enum import Enum
 
 class Protocol(Enum):
     SOLANA = ("solana", "SOL")
-    ETHEREUM = ("ethereum", "ETH")
-    BITCOIN = ("bitcoin", "BTC")
-    POLKADOT = ("polkadot", "DOT")
-    CARDANO = ("cardano", "ADA")
     COSMOS = ("cosmos", "ATOM")
     
     def __init__(self, name: str, ticker: str):
