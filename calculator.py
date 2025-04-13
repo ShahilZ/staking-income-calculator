@@ -30,7 +30,7 @@ def fetch_usd_protocol_price(protocol: Protocol, year: int):
         logger.info(f"Start date is after end date, skipping {protocol.value} for {year}")
         return None
 
-    url = f"https://api.coingecko.com/api/v3/coins/{protocol.value}/market_chart/range?vs_currency=usd&from={start_date}&to={end_date}"
+    url = f"https://api.coingecko.com/api/v3/coins/{protocol.name}/market_chart/range?vs_currency=usd&from={start_date}&to={end_date}"
     response = requests.get(url)
     logger.info(f"Received response for historical prices: {response.status_code}")
     data = response.json()

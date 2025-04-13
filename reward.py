@@ -26,8 +26,7 @@ class Reward:
         """
         if not prices:
             return None
-        logger.info(f"Finding reward by timestamp: {target_timestamp}")
-        logger.info(f"Prices: {prices}")
+        logger.debug(f"Finding reward by timestamp: {target_timestamp}")
 
         # Sort prices by timestamp if not already sorted
         sorted_prices = sorted(prices, key=lambda p: p[0])
