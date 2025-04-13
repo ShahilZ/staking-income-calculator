@@ -4,7 +4,8 @@ import logging
 import requests
 from typing import List, Dict, Any
 
-from assets.solana import Client as SolanaClient, compute_staking_rewards
+from assets.cosmos import compute_staking_rewards as compute_cosmos_staking_rewards
+from assets.solana import Client as SolanaClient, compute_staking_rewards as compute_solana_staking_rewards
 from protocol import Protocol
 from reward import Reward
 from csv_loader import load_csv
@@ -55,11 +56,13 @@ def fetch_staking_income_from_file(protocol: Protocol, year: int, reward_file: s
     Computes the staking income for the given protocol and year.
     """
     logger.info(f"Computing staking income for {protocol.value} in {year}")
+    rewards = load_csv(file_path=reward_file, has_header=True) 
+    logger.info(f"Loaded {len(rewards)} rewards")
     match (protocol):
         case Protocol.SOLANA:
-            rewards = load_csv(file_path=reward_file, has_header=True) 
-            logger.info(f"Loaded {len(rewards)} rewards")
-            return compute_staking_rewards(rewards, year)
+            return compute_solana_staking_rewards(rewards, year)
+        case Protocol.COSMOS:
+            return compute_cosmos_staking_rewards(rewards, year)
         case _:
             raise ValueError(f"Unsupported protocol: {protocol}")
     
@@ -91,3 +94,19 @@ async def calculate_staking_income(protocol: Protocol, year: int, address: str, 
           raise ValueError(f"No price found for {reward.timestamp}")
 
     return staking_income
+
+
+def calculate_staking_income_without_daily_prices(protocol: Protocol, year: int, address: str, reward_file: str) -> List[Reward]:
+    """
+    Calculates the staking income for the given protocol and year. This function should be used if we don't need daily USD prices.
+    """
+    logger.info(f"Calculating staking income for {protocol.value} in {year}")
+    logger.info(f"Fetching staking income for {protocol.value}")
+    if not reward_file:
+        raise ValueError("reward_file is required")
+    staking_income = fetch_staking_income_from_file(protocol, year, reward_file)
+
+    return staking_income
+
+    
+
