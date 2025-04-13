@@ -38,7 +38,7 @@ def fetch_usd_protocol_price(protocol: Protocol, year: int):
     return sorted(data["prices"], key=lambda x: x[0])
 
 
-async def fetch_staking_income(protocol: Protocol, year: int, address: str):
+async def fetch_staking_income_with_client(protocol: Protocol, year: int, address: str):
     """
     Fetches the staking income for the given protocol and year.
     """
@@ -50,7 +50,7 @@ async def fetch_staking_income(protocol: Protocol, year: int, address: str):
             raise ValueError(f"Unsupported protocol: {protocol}")
 
 
-def compute_staking_income(protocol: Protocol, year: int, address: str, reward_file: str) -> List[Dict[str, Any]]:
+def fetch_staking_income_from_file(protocol: Protocol, year: int, reward_file: str) -> List[Dict[str, Any]]:
     """
     Computes the staking income for the given protocol and year.
     """
@@ -76,10 +76,10 @@ async def calculate_staking_income(protocol: Protocol, year: int, address: str, 
 
     logger.info(f"Fetching staking income for {protocol.value}")
     if reward_file:
-        staking_income = compute_staking_income(protocol, year, address, reward_file)
+        staking_income = fetch_staking_income_from_file(protocol, year, reward_file)
     else:
         assert address, "Address is required if reward_file is not provided"
-        staking_income = await fetch_staking_income(protocol, year, address)
+        staking_income = await fetch_staking_income_with_client(protocol, year, address)
 
     # Compute USD value for each reward.
     for reward in staking_income:
