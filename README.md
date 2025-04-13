@@ -1,11 +1,10 @@
 # staking-income-calculator
 Basic Repo to Calculate Staking Income
 
-## Overview
 Simple calculator that attempts to return total staking income in the provided tax year along with the USD-denominated amount.
 
-### USD Prices
-This code uses Coin Gecko's free public api to determine USD prices. The api returns the price of the token at 00:00 UTC time.
+## USD Prices
+This code uses Coin Gecko's free public api [endpoint](https://docs.coingecko.com/v3.0.1/reference/coins-id-market-chart-range) to determine USD prices. The api returns the price of the token at 00:00 UTC time (beginning of day).
 Note: The api call uses the free version, so there is only historical data for the last 365 days.
 
 
